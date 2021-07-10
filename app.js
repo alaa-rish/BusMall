@@ -14,6 +14,7 @@ let prevPr1 = null;
 let prevPr2 = null;
 let prevPr3 = null;
 
+// Product List with image Source
 let products = [
   new Product('bag', 'img/bag.jpg'),
   new Product('banana', 'img/banana.jpg'),
@@ -36,10 +37,13 @@ let products = [
   new Product('wine-glass', 'img/wine-glass.jpg'),
 ];
 
+// Store product list to local storage.
+
 function saveProductsToLocalStorage() {
   let jsonProducts = JSON.stringify(products);
   localStorage.setItem('products', jsonProducts);
 }
+// Update number of products clicks and views form the local storage if it exists.
 
 function updateProducts() {
   let savedProducts = localStorage.getItem('products');
@@ -52,8 +56,10 @@ function updateProducts() {
   }
 }
 
+
 updateProducts();
 
+// Picking 3 unique images.
 function reShowImgs() {
   let pr1 = products[Math.floor(Math.random() * products.length)];
   let pr2 = products[Math.floor(Math.random() * products.length)];
@@ -66,7 +72,7 @@ function reShowImgs() {
   }
   return [pr1, pr2, pr3];
 }
-
+// Show randome 3 images without dublicatin for sequencial sets.
 function showRandom3Imgs() {
   let prs = reShowImgs();
   while(prs[0] === prevPr1 || prs[0] === prevPr2 || prs[0] === prevPr3 ||
@@ -98,6 +104,8 @@ document.getElementById('pr1').addEventListener('click', refreshImages);
 document.getElementById('pr2').addEventListener('click', refreshImages);
 document.getElementById('pr3').addEventListener('click', refreshImages);
 
+
+// Update the shown images in the UI.
 function refreshImages(event) {
   if (rounds === 1) {
     document.getElementById('pr1').removeEventListener('click', refreshImages);
@@ -127,6 +135,7 @@ function displayVewResultsBtn() {
   document.getElementById('vewResultsBtn').addEventListener('click', vewResults);
 }
 
+// View products votes and views after clicking the view results button.
 function vewResults() {
   let results = document.getElementById('results');
 
@@ -146,6 +155,7 @@ function vewResults() {
   saveProductsToLocalStorage();
 }
 
+// Building data in the charts.
 function buildChartResults() {
   let prNames = [];
   let prVotes = [];
