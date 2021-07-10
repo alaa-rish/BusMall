@@ -10,6 +10,10 @@ function Product(name, src) {
 let rounds = 25;
 document.getElementById('rounds').innerHTML = rounds;
 
+let prevPr1 = null;
+let prevPr2 = null;
+let prevPr3 = null;
+
 let products = [
   new Product('bag', 'img/bag.jpg'),
   new Product('banana', 'img/banana.jpg'),
@@ -32,7 +36,7 @@ let products = [
   new Product('wine-glass', 'img/wine-glass.jpg'),
 ];
 
-function showRandom3Imgs() {
+function reShowImgs() {
   let pr1 = products[Math.floor(Math.random() * products.length)];
   let pr2 = products[Math.floor(Math.random() * products.length)];
   while(pr2 === pr1) {
@@ -42,6 +46,24 @@ function showRandom3Imgs() {
   while(pr3 === pr1 || pr3 === pr2) {
     pr3 = products[Math.floor(Math.random() * products.length)];
   }
+  return [pr1, pr2, pr3];
+}
+
+function showRandom3Imgs() {
+  let prs = reShowImgs();
+  while(prs[0] === prevPr1 || prs[0] === prevPr2 || prs[0] === prevPr3 ||
+        prs[1] === prevPr1 || prs[1] === prevPr2 || prs[1] === prevPr3 ||
+        prs[2] === prevPr1 || prs[2] === prevPr2 || prs[2] === prevPr3) {
+    prs = reShowImgs();
+  }
+
+  let pr1 = prs[0];
+  let pr2 = prs[1];
+  let pr3 = prs[2];
+
+  prevPr1 = pr1;
+  prevPr2 = pr2;
+  prevPr3 = pr3;
 
   pr1.showCnt++;
   pr2.showCnt++;
@@ -59,12 +81,11 @@ document.getElementById('pr2').addEventListener('click', refreshImages);
 document.getElementById('pr3').addEventListener('click', refreshImages);
 
 function refreshImages(event) {
-  if (rounds === 0) {
+  if (rounds === 1) {
     document.getElementById('pr1').removeEventListener('click', refreshImages);
     document.getElementById('pr2').removeEventListener('click', refreshImages);
     document.getElementById('pr3').removeEventListener('click', refreshImages);
     displayVewResultsBtn();
-    return;
   }
 
   event.preventDefault();
@@ -99,5 +120,47 @@ function vewResults() {
   }
   results.appendChild(ul);
 
-  results.style.display = 'block';
+  buildChartResults();
+
+  results.style.display = 'inline-block';
+  document.getElementById('charts').style.display='inline-block';
+}
+
+function buildChartResults() {
+  let prNames = [];
+  let prVotes = [];
+  let prViews = [];
+  for(let i = 0; i < products.length; i++) {
+    prNames.push(products[i].name);
+    prVotes.push(products[i].clickCnt);
+    prViews.push(products[i].showCnt);
+  }
+
+  let canvas = document.getElementById("chartResults");
+  new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: prNames,
+      datasets: [
+        {
+          label: "Votes",
+          data: prVotes,
+          backgroundColor: ["blue"],
+        },
+        {
+          label: "views",
+          data: prViews,
+          backgroundColor: ["green"],
+        },
+      ],
+    },
+  
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
 }

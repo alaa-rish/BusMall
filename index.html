@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +20,11 @@
     <section id="viewResults" style="display: none;">
         <button id="vewResultsBtn">View Results</button>
     </section>
-    <section id="results" style="display: none;"></section>
+    <section>
+      <div id="results" style="display: none;"></div>
+      <div id="charts" style="display: none;position: absolute;width: 40%;top: 550px;"><canvas id="chartResults" ></canvas></div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
